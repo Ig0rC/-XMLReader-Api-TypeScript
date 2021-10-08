@@ -9,9 +9,11 @@ class UploadZipUseCase {
   private readonly parserXML = new xml2.Parser();
 
   async execute(iUploadZipRequest: any): Promise<iCustomResponse> {
-    const teste = iUploadZipRequest[''];
+    this.xml = [];
+    const teste = iUploadZipRequest.zipXML;
+    
 
-    if (teste.mimetype.slice(12, 15) !== 'zip') {
+    if (teste.mimetype.slice(12, 28) !== 'x-zip-compressed') {
       return {
         error: 'Tipo de arquivo inválido',
         statusCode: 400,
@@ -19,20 +21,6 @@ class UploadZipUseCase {
     }
 
     const zip = new AdmZip(teste?.data) as any;
-
-    if (!zip) {
-      return {
-        error: 'ZIP',
-        statusCode: 400,
-      };
-    }
-
-    if (!zip) {
-      return {
-        error: 'Tipo de arquivo inválido',
-        statusCode: 400,
-      };
-    }
 
     zip.forEach((zipEntry: any) => {
       if (zipEntry.entryName.indexOf('.xml') !== -1) {

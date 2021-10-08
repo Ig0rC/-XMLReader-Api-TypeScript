@@ -1,5 +1,6 @@
 import express, { json } from 'express';
 import fileUpload from 'express-fileupload';
+import cors from './middleware/cors';
 import errorHandler from './middleware/errorHandler';
 import UploadZip from './routes/UploadZip';
 
@@ -12,6 +13,8 @@ class App {
   }
 
   private middlewares(): void {
+    this.app.use(cors);
+    this.app.use(errorHandler);
     this.app.use(
       fileUpload({
         uriDecodeFileNames: true,
@@ -21,7 +24,6 @@ class App {
   }
 
   private routes(): void {
-    this.app.use(errorHandler);
     this.app.use('/', UploadZip);
   }
 }
